@@ -4,6 +4,7 @@ import 'Merchant.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'ItemInfoStackLayer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
 
 /// Displays its integer item as 'item N' on a Card whose color is based on
 /// the item's value. The text is displayed in bright green if selected is true.
@@ -15,11 +16,14 @@ class CardItem extends StatelessWidget {
       @required this.animation,
       this.onTap,
       @required this.item,
+        @required this.userPosition,
       this.selected: false})
       : assert(animation != null),
         assert(item != null),
         assert(selected != null),
         super(key: key);
+
+  final Position userPosition;
 
   final tagText = const {
     'Bitcoin',
@@ -278,7 +282,8 @@ class CardItem extends StatelessWidget {
                                   item: item,
                                   textStyle: textStyle,
                                   textStyleSmall: textStyle2,
-                                  tagText: tagText)
+                                  tagText: tagText,
+                                  position: userPosition,)
                             ],
                           ),
                         ],

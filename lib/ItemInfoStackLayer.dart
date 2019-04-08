@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:endlisch/Merchant.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ItemInfoStackLayer extends StatelessWidget {
   const ItemInfoStackLayer({
@@ -10,12 +11,14 @@ class ItemInfoStackLayer extends StatelessWidget {
     @required this.textStyle,
     @required this.textStyleSmall,
     @required this.tagText,
+    @required this.position,
   }) : super(key: key);
 
   final Merchant item;
   final TextStyle textStyle;
   final TextStyle textStyleSmall;
   final Set<String> tagText;
+  final Position position;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,7 @@ class ItemInfoStackLayer extends StatelessWidget {
             Row(
               children: <Widget>[
                 Text(
-                  "0,1 km   ",
+                  position != null ? position.latitude.toString() : "0,1 km   ",
                   style: textStyleSmall,
                 ),
                 Stack(

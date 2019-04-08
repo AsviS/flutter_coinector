@@ -5,6 +5,7 @@ import 'ListModel.dart';
 import 'CardItem.dart';
 import 'Merchant.dart';
 import 'dart:convert';
+import 'package:geolocator/geolocator.dart';
 
 class AnimatedListSample extends StatefulWidget {
   @override
@@ -77,6 +78,10 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
   ListModel<Merchant> tempListWellness;
   Response response;
   String _title = "Coinector";
+
+  Geolocator geolocator = Geolocator();
+
+  Position userLocation;
 
   @override
   void dispose() {
@@ -187,9 +192,24 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
       });
   }
 
+
+  void _initLocation() async {
+    Position tmpPos;
+    try {
+      tmpPos = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      tmpPos = null;
+    }
+    setState(() {
+      userLocation = tmpPos;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+
     _controller = TabController(vsync: this, length: _pagesTags.length);
     _controller.addListener(_handleTabSelection);
     _listRestaurant = ListModel<Merchant>(
@@ -222,6 +242,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     );
     _nextItem = 3;
     _getNames();
+    _initLocation();
   }
 
   // Used to build list items that haven't been removed.
@@ -230,6 +251,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     return CardItem(
       animation: animation,
       item: _listRestaurant[index],
+      userPosition: userLocation,
     );
   }
 
@@ -238,6 +260,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     return CardItem(
       animation: animation,
       item: _listBar[index],
+      userPosition: userLocation,
     );
   }
 
@@ -246,6 +269,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     return CardItem(
       animation: animation,
       item: _listHotel[index],
+      userPosition: userLocation,
     );
   }
 
@@ -254,6 +278,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     return CardItem(
       animation: animation,
       item: _listATM[index],
+      userPosition: userLocation,
     );
   }
 
@@ -262,6 +287,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     return CardItem(
       animation: animation,
       item: _listWellness[index],
+      userPosition: userLocation,
     );
   }
 
@@ -270,6 +296,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     return CardItem(
       animation: animation,
       item: _listMarket[index],
+      userPosition: userLocation,
     );
   }
 
@@ -278,6 +305,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
     return CardItem(
       animation: animation,
       item: _listShop[index],
+      userPosition: userLocation,
     );
   }
 
@@ -292,6 +320,7 @@ class _AnimatedListSampleState extends State<AnimatedListSample>
       animation: animation,
       item: item,
       selected: false,
+      userPosition: userLocation,
       // No gesture detector here: we don't want removed items to be interactive.
     );
   }
